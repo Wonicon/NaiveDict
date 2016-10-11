@@ -41,11 +41,22 @@ public class TrieTree {
     return next == null ? null : next[ch];
   }
 
+  public TrieTree getNext(String s) {
+    TrieTree root = this;
+    for (char c : s.toCharArray()) {
+      root = root.getNext(c);
+      if (root == null) {
+        return null;
+      }
+    }
+    return root;
+  }
+
   private void setEnd() {
     isWordEnd = true;
   }
 
-  private boolean isEnd() {
+  public boolean isEnd() {
     return isWordEnd;
   }
 
