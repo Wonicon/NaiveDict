@@ -1,33 +1,15 @@
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class TrieTree {
-  private TrieNode root = new TrieNode();
+  private TrieTree[] next;
 
   /**
-   * Determine whether string s exists in the tree.
-   * @param s The input string.
-   * @return True if s exists, false otherwise.
+   * Indicate whether this node mark the end of a word.
+   * i.e. this == some.getNext(word.lastChar).
    */
-  public boolean find(String s) {
-    TrieNode t = root;
-    for (char c : s.toCharArray()) {
-      t = t.getNext(c);
-      if (t == null) {
-        return false;
-      }
-    }
-    return t.isEnd();
-  }
-
-  public void add(String s) {
-    TrieNode t = root;
-    for (char c : s.toCharArray()) {
-      t.addNext(c);
-      t = t.getNext(c);
-    }
-    t.setEnd();
-  }
+  private boolean isWordEnd = false;
 
   public static void main(String[] args) {
     TrieTree tree = new TrieTree();
@@ -43,7 +25,7 @@ public class TrieTree {
 
     dictionary.nextLine();  // Consume the header.
     while (dictionary.hasNext()) {
-      System.out.println(dictionary.next());  // Consume the sequence number.
+      dictionary.next();  // Consume the sequence number.
       tree.add(dictionary.next());  // Record the word.
       dictionary.nextLine();  // Ignore other information.
     }
@@ -53,5 +35,54 @@ public class TrieTree {
     while (scanner.hasNext()) {
       System.out.println(tree.find(scanner.next()));
     }
+  }
+
+  public TrieTree getNext(char ch) {
+    return next == null ? null : next[ch];
+  }
+
+  private void setEnd() {
+    isWordEnd = true;
+  }
+
+  private boolean isEnd() {
+    return isWordEnd;
+  }
+
+  private void addNext(char ch) {
+    // Delay the next array construction of the leaf node.
+    if (next == null) {
+      next = new TrieTree[128];
+    }
+
+    if (next[ch] == null) {
+      next[ch] = new TrieTree();
+    }
+  }
+
+  /**
+   * Determine whether string s exists in the tree.
+   *
+   * @param s The input string.
+   * @return True if s exists, false otherwise.
+   */
+  public boolean find(String s) {
+    TrieTree t = this;
+    for (char c : s.toCharArray()) {
+      t = t.getNext(c);
+      if (t == null) {
+        return false;
+      }
+    }
+    return t.isEnd();
+  }
+
+  public void add(String s) {
+    TrieTree t = this;
+    for (char c : s.toCharArray()) {
+      t.addNext(c);
+      t = t.getNext(c);
+    }
+    t.setEnd();
   }
 }
