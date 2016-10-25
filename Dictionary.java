@@ -6,7 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.collections.*;
 
-public class DictWindow extends Application {
+public class Dictionary extends Application {
   public static final ObservableList<String> entries = FXCollections.observableArrayList();
 
   @Override

@@ -1,3 +1,5 @@
+import sun.text.normalizer.Trie;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -10,32 +12,6 @@ public class TrieTree {
    * i.e. this == some.getNext(word.lastChar).
    */
   private boolean isWordEnd = false;
-
-  public static void main(String[] args) {
-    TrieTree tree = new TrieTree();
-
-    File file = new File(args[0]);
-    Scanner dictionary;
-    try {
-      dictionary = new Scanner(file);
-    } catch(FileNotFoundException e) {
-      System.out.println("dictionary " + args[0] + " not found.");
-      return;
-    }
-
-    dictionary.nextLine();  // Consume the header.
-    while (dictionary.hasNext()) {
-      dictionary.next();  // Consume the sequence number.
-      tree.add(dictionary.next());  // Record the word.
-      dictionary.nextLine();  // Ignore other information.
-    }
-
-    System.out.println("Input word to query, EOF to exit.");
-    Scanner scanner = new Scanner(System.in);
-    while (scanner.hasNext()) {
-      System.out.println(tree.find(scanner.next()));
-    }
-  }
 
   public TrieTree getNext(char ch) {
     return next == null ? null : next[ch];
@@ -95,5 +71,30 @@ public class TrieTree {
       t = t.getNext(c);
     }
     t.setEnd();
+  }
+
+  public static TrieTree createTree(String file) throws FileNotFoundException {
+    TrieTree tree = new TrieTree();
+
+    try (Scanner dictionary = new Scanner(new File(file))) {
+      dictionary.nextLine();              // Consume the header.
+      while (dictionary.hasNext()) {
+        dictionary.next();                // Consume the sequence number.
+        tree.add(dictionary.next());      // Record the word.
+        dictionary.nextLine();            // Ignore other information.
+      }
+    }
+
+    return tree;
+  }
+
+  public static void main(String[] args) throws Exception {
+    TrieTree tree = createTree(args[0]);
+
+    System.out.println("Input word to query, EOF to exit.");
+    Scanner scanner = new Scanner(System.in);
+    while (scanner.hasNext()) {
+      System.out.println(tree.find(scanner.next()));
+    }
   }
 }

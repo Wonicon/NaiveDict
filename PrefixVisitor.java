@@ -46,26 +46,10 @@ public class PrefixVisitor {
     }
   }
 
-  public static void main(String[] args) {
-    TrieTree tree = new TrieTree();
-
-    File file = new File(args[0]);
-    Scanner dictionary;
-    try {
-      dictionary = new Scanner(file);
-    } catch(FileNotFoundException e) {
-      System.out.println("dictionary " + args[0] + " not found.");
-      return;
-    }
-
-    dictionary.nextLine();  // Consume the header.
-    while (dictionary.hasNext()) {
-      dictionary.next();  // Consume the sequence number.
-      tree.add(dictionary.next());  // Record the word.
-      dictionary.nextLine();  // Ignore other information.
-    }
-
+  public static void main(String[] args) throws Exception {
+    TrieTree tree = TrieTree.createTree(args[0]);
     PrefixVisitor prefixVisitor = new PrefixVisitor(tree);
+
     System.out.println("Input prefix and limit, EOF to exit.");
     Scanner scanner = new Scanner(System.in);
     while (scanner.hasNext()) {
