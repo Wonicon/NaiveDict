@@ -1,5 +1,4 @@
-import java.io.*;
-import java.util.Scanner;
+import java.util.*;
 
 public class PrefixVisitor {
   /**
@@ -17,16 +16,20 @@ public class PrefixVisitor {
     this.dictionary = dictionary;
   }
 
-  public void showByPrefix(String prefix, int limit) {
+  public ArrayList<String> collectByPrefix(String prefix, int limit) {
     buffer = new StringBuilder(prefix);
     this.limit = limit;
+    ArrayList<String> results = new ArrayList<>();
     TrieTree root = dictionary.getNext(prefix);
-    showByPrefix(root);
+    if (root != null) {
+      collectByPrefix(root, results);
+    }
+    return results;
   }
 
-  private void showByPrefix(TrieTree root) {
+  private void collectByPrefix(TrieTree root, ArrayList<String> results) {
     if (root.isEnd()) {
-      System.out.println(buffer.toString());
+      results.add(buffer.toString());
       limit--;
       if (limit == 0) {
         return;
@@ -37,12 +40,19 @@ public class PrefixVisitor {
       TrieTree next = root.getNext(c);
       if (next != null) {
         buffer.append(c);
-        showByPrefix(next);
+        collectByPrefix(next, results);
         buffer.deleteCharAt(buffer.length() - 1);
         if (limit == 0) {
           break;
         }
       }
+    }
+  }
+
+  public void showByPrefix(String prefix, int limit) {
+    ArrayList<String> results = collectByPrefix(prefix, limit);
+    for (String s : results) {
+      System.out.println(s);
     }
   }
 

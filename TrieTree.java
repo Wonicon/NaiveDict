@@ -73,7 +73,7 @@ public class TrieTree {
     t.setEnd();
   }
 
-  public static TrieTree createTree(String file) throws FileNotFoundException {
+  public static TrieTree createTree(String file) {
     TrieTree tree = new TrieTree();
 
     try (Scanner dictionary = new Scanner(new File(file))) {
@@ -83,6 +83,8 @@ public class TrieTree {
         tree.add(dictionary.next());      // Record the word.
         dictionary.nextLine();            // Ignore other information.
       }
+    } catch (FileNotFoundException e) {
+      System.out.println(file + " not found");
     }
 
     return tree;
