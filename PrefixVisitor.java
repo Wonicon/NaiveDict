@@ -3,48 +3,32 @@ import java.util.*;
 public class PrefixVisitor {
   private TrieTree dictionary;
 
-  private int limit = 0;
-
-  private final String chars = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ ";
+  private ArrayList<String> results;
 
   PrefixVisitor(TrieTree dictionary) {
     this.dictionary = dictionary;
   }
 
-  public ArrayList<String> collectByPrefix(String prefix, int limit) {
-    this.limit = limit;
-    ArrayList<String> results = new ArrayList<>();
+  public ArrayList<String> collectByPrefix(String prefix) {
+    this.results = new ArrayList<>();
     TrieTree root = dictionary.getNext(prefix);
     if (root != null) {
-      collectByPrefix(root, results);
+      collectByPrefix(root);
     }
     return results;
   }
 
-  private void collectByPrefix(TrieTree root, ArrayList<String> results) {
+  private void collectByPrefix(TrieTree root) {
     if (root.isEnd()) {
       results.add(root.getEntry().getWord());
-      limit--;
-      if (limit == 0) {
-        return;
-      }
     }
 
+    final String chars = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ ";
     for (char c : chars.toCharArray()) {
       TrieTree next = root.getNext(c);
       if (next != null) {
-        collectByPrefix(next, results);
-        if (limit == 0) {
-          break;
-        }
+        collectByPrefix(next);
       }
-    }
-  }
-
-  public void showByPrefix(String prefix, int limit) {
-    ArrayList<String> results = collectByPrefix(prefix, limit);
-    for (String s : results) {
-      System.out.println(s);
     }
   }
 
@@ -52,12 +36,11 @@ public class PrefixVisitor {
     TrieTree tree = TrieTree.createTree(args[0]);
     PrefixVisitor prefixVisitor = new PrefixVisitor(tree);
 
-    System.out.println("Input prefix and limit, EOF to exit.");
+    System.out.println("Input prefix, EOF to exit.");
     Scanner scanner = new Scanner(System.in);
     while (scanner.hasNext()) {
-      String prefix = scanner.next();
-      int limit = scanner.nextInt();
-      prefixVisitor.showByPrefix(prefix, limit);
+      ArrayList<String> strings = prefixVisitor.collectByPrefix(scanner.next());
+      strings.forEach(System.out::println);
     }
   }
 }

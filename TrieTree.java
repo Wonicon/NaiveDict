@@ -1,5 +1,3 @@
-import sun.text.normalizer.Trie;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -73,7 +71,7 @@ public class TrieTree {
   }
 
   public static TrieTree createTree(String file) {
-    Timer.start();
+    Timer t = new Timer();
 
     TrieTree tree = new TrieTree();
 
@@ -87,17 +85,17 @@ public class TrieTree {
       System.out.println(file + " not found");
     }
 
-    Timer.report("Initialize");
+    t.report("Initialize");
     return tree;
   }
 
   public static TrieTree createTree(Entry[] entries) {
-    Timer.start();
+    Timer t = new Timer();
     TrieTree tree = new TrieTree();
     for (Entry e : entries) {
       tree.add(e);
     }
-    Timer.report("Indexing");
+    t.report("Indexing");
     return tree;
   }
 

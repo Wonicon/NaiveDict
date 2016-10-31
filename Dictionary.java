@@ -7,12 +7,11 @@ import javafx.scene.layout.*;
 import javafx.collections.*;
 
 import java.util.Arrays;
-import java.util.PriorityQueue;
 
 public class Dictionary extends Application {
-  public static final ObservableList<String> entries = FXCollections.observableArrayList();
+  private static ObservableList<String> entries = FXCollections.observableArrayList();
 
-  Entry[] words;
+  private Entry[] words;
 
   private TrieTree index;
 
@@ -27,13 +26,14 @@ public class Dictionary extends Application {
     index = TrieTree.createTree(words);
     prefixAssociation = new PrefixVisitor(index);
 
-
     // Init UI elements
     TextField textField = new TextField("Type Me");
 
     ListView<String> listView = new ListView<>();
     listView.setItems(entries);
 
+    // When we select an item in the side bar, update the text in the text field.
+    ///  @todo update detail info panel when selected.
     listView.getSelectionModel().selectedItemProperty().addListener((o, old_, new_) -> {
       if (new_ != null) {
         selectedEntry = new_;
@@ -45,7 +45,7 @@ public class Dictionary extends Application {
     textField.textProperty().addListener((obs_, old_, new_) -> {
       if (!new_.equals(selectedEntry)) {  // Avoid nonsense updating and concurrency hazard.
         entries.clear();
-        entries.addAll(prefixAssociation.collectByPrefix(new_, -1));
+        entries.addAll(prefixAssociation.collectByPrefix(new_));
       }
     });
 
@@ -56,7 +56,8 @@ public class Dictionary extends Application {
       if (ent != null) {
         System.out.println(ent.getDescription());
       } else {
-        Timer.start();
+        Timer t = new Timer();
+
         LeastEditDistance led = new LeastEditDistance(textField.getText());
         LeastEditDistance.Pair[] queue = new LeastEditDistance.Pair[words.length];
         for (int i = queue.length - 1; i >= 0; i--) {
@@ -66,7 +67,8 @@ public class Dictionary extends Application {
         for (int i = 0; i < 10; i++) {
           System.out.println(queue[i].getCandidate() + ": " + queue[i].getEditDistance());
         }
-        Timer.report("L.E.D.");
+
+        t.report("L.E.D.");
       }
     });
 

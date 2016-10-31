@@ -41,7 +41,7 @@ public class Entry {
   }
 
   public static Entry[] getEntriesFromDictionary(String file) {
-    Timer.start();
+    Timer t = new Timer();
     ArrayList<Entry> list = new ArrayList<>();
     try (Scanner dictionary = new Scanner(new File(file))) {
       dictionary.nextLine();  // Consume the header.
@@ -51,7 +51,7 @@ public class Entry {
     } catch (FileNotFoundException e) {
       System.out.println(file + " not found");
     }
-    Timer.report("Retrieve entries");
+    t.report("Retrieve entries");
     return list.toArray(new Entry[list.size()]);
   }
 }
