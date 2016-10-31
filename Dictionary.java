@@ -1,5 +1,6 @@
 import javafx.application.*;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Font;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
@@ -23,11 +24,21 @@ public class Dictionary extends Application {
 
   private void updateInfo(String word) {
     Entry entry = index.getNext(word).getEntry();
+    String p = entry.getPronunciation();
+    p = p == null ? "" : ("[" + p + "]");
     textArea.setText(
       entry.getWord() + "\n"
-      + entry.getPronunciation() + "\n"
+      + p + "\n"
       + entry.getDescription()
     );
+  }
+
+  private void updateRecommendation(String[] words) {
+    StringBuilder builder = new StringBuilder("Do you mean:\n");
+    for (String s : words) {
+      builder.append("  ").append(s).append("\n");
+    }
+    textArea.setText(builder.toString());
   }
 
   @Override
@@ -42,7 +53,9 @@ public class Dictionary extends Application {
 
     TextField textField = new TextField("Type Me");
     ListView<String> listView = new ListView<>();
-    textArea = new TextArea("Hello");
+    textArea = new TextArea();
+    textArea.setEditable(false);
+    textArea.setFont(new Font("", 20));
 
     // Bind list items to entry list.
     listView.setItems(entries);
@@ -81,10 +94,12 @@ public class Dictionary extends Application {
           queue[i] = led.new Pair(words[i].getWord());
         }
         Arrays.sort(queue);
-        for (int i = 0; i < 10; i++) {
-          System.out.println(queue[i].getCandidate() + ": " + queue[i].getEditDistance());
+        String[] recommend = new String[5];
+        for (int i = 0; i < recommend.length; i++) {
+          recommend[i] = queue[i].getCandidate();
         }
 
+        updateRecommendation(recommend);
         t.report("L.E.D.");
       }
     });
@@ -93,18 +108,18 @@ public class Dictionary extends Application {
 
     VBox vbox = new VBox();
     vbox.getChildren().addAll(textField, listView);
-    vbox.getPadding();
+    VBox.setVgrow(listView, Priority.ALWAYS);
 
-    BorderPane borderPane = new BorderPane();
-    borderPane.setLeft(vbox);
-    borderPane.setRight(textArea);
+    HBox hbox = new HBox();
+    hbox.getChildren().addAll(vbox, textArea);
+    HBox.setHgrow(textArea, Priority.ALWAYS);
+    vbox.setPrefWidth(150);
+    vbox.setMinWidth(135);
 
-    Group root = new Group(borderPane);
-    Scene scene = new Scene(root, 400, 400);
+    Scene scene = new Scene(hbox, 500, 500);
     primaryStage.setTitle("Dictionary");
     primaryStage.setScene(scene);
     primaryStage.show();
-    primaryStage.setResizable(false);
   }
 
   public static void main(String[] args) {
