@@ -9,6 +9,8 @@ import javafx.collections.*;
 public class Dictionary extends Application {
   public static final ObservableList<String> entries = FXCollections.observableArrayList();
 
+  Entry[] words;
+
   private TrieTree index;
 
   private PrefixVisitor prefixAssociation;
@@ -18,7 +20,8 @@ public class Dictionary extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
     // Init resources
-    index = TrieTree.createTree("dictionary.txt");
+    words = Entry.getEntriesFromDictionary("dictionary.txt");
+    index = TrieTree.createTree(words);
     prefixAssociation = new PrefixVisitor(index);
 
 
@@ -45,7 +48,10 @@ public class Dictionary extends Application {
 
     // onAction is called when typed ENTER
     textField.setOnAction(e -> {
-      System.out.println(index.getEntry(textField.getText()).getEntry().getDescription());
+      Entry ent = index.getNext(textField.getText()).getEntry();
+      if (ent != null) {
+        System.out.println(ent.getDescription());
+      }
     });
 
     VBox stackPane = new VBox();

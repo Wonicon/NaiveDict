@@ -1,5 +1,3 @@
-import java.util.Locale;
-import java.util.Objects;
 import java.util.Scanner;
 
 /**
@@ -33,18 +31,18 @@ public class LeastEditDistance {
   /**
    * This is a class to facilitate the sort of the second string based on edit distance.
    */
-  public class StringDistancePair implements Comparable {
+  public class Pair implements Comparable {
     private String candidate = null;
     private int editDistance = Integer.MAX_VALUE;
 
-    public StringDistancePair(String candidate_) {
+    public Pair(String candidate_) {
       candidate = candidate_;
       editDistance = leastEditDistance(original, candidate);
     }
 
     @Override
     public int compareTo(Object o) {
-      StringDistancePair led = (StringDistancePair) o;
+      Pair led = (Pair) o;
       if (this.editDistance < led.editDistance) return -1;
       else if (this.editDistance == led.editDistance) return 0;
       else return 1;
@@ -69,9 +67,9 @@ public class LeastEditDistance {
     //==--
 
     LeastEditDistance led = new LeastEditDistance(original);
-    LeastEditDistance.StringDistancePair[] pairs = new LeastEditDistance.StringDistancePair[n];
+    Pair[] pairs = new Pair[n];
     for (int i = 0; i < n; i++) {
-      pairs[i] = led.new StringDistancePair(candidates[i]);
+      pairs[i] = led.new Pair(candidates[i]);
     }
 
     java.util.Arrays.sort(pairs);

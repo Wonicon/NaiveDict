@@ -90,6 +90,16 @@ public class TrieTree {
     return tree;
   }
 
+  public static TrieTree createTree(Entry[] entries) {
+    long t = System.nanoTime();
+    TrieTree tree = new TrieTree();
+    for (Entry e : entries) {
+      tree.add(e);
+    }
+    System.out.println("Indexing: " + (System.nanoTime() - t) / 1000_000.0 + "ms.");
+    return tree;
+  }
+
   public static void main(String[] args) throws Exception {
     TrieTree tree = createTree(args[0]);
 
