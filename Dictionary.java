@@ -49,7 +49,7 @@ public class Dictionary extends Application {
     stackPane.getPadding();
     Group root = new Group(stackPane);
     Scene scene = new Scene(root, 400, 300);
-    primaryStage.setTitle("Hello World");
+    primaryStage.setTitle("Dictionary");
     primaryStage.setScene(scene);
     primaryStage.show();
   }

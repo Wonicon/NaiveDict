@@ -8,10 +8,13 @@ public class TrieTree {
   private TrieTree[] next;
 
   /**
-   * Indicate whether this node mark the end of a word.
-   * i.e. this == some.getNext(word.lastChar).
+   * Point to a valid dictionary entry.
    */
-  private boolean isWordEnd = false;
+  private Entry entry;
+
+  public Entry getEntry() {
+    return entry;
+  }
 
   public TrieTree getNext(char ch) {
     return next == null ? null : next[ch];
@@ -28,12 +31,8 @@ public class TrieTree {
     return root;
   }
 
-  private void setEnd() {
-    isWordEnd = true;
-  }
-
   public boolean isEnd() {
-    return isWordEnd;
+    return entry != null;
   }
 
   private void addNext(char ch) {
@@ -64,25 +63,26 @@ public class TrieTree {
     return t.isEnd();
   }
 
-  public void add(String s) {
+  public void add(Entry e) {
     TrieTree t = this;
-    for (char c : s.toCharArray()) {
+    for (char c : e.getWord().toCharArray()) {
       t.addNext(c);
       t = t.getNext(c);
     }
-    t.setEnd();
+    t.entry = e;
   }
 
   public static TrieTree createTree(String file) {
     TrieTree tree = new TrieTree();
 
     try (Scanner dictionary = new Scanner(new File(file))) {
-      dictionary.nextLine();              // Consume the header.
+      dictionary.nextLine();  // Consume the header.
+      long t = System.nanoTime();
       while (dictionary.hasNext()) {
-        // ID | Entry | [Pron] | Description
-        String[] items = dictionary.nextLine().split("\t");
-        tree.add(items[1]);
+        Entry entry = new Entry(dictionary.nextLine());
+        tree.add(entry);
       }
+      System.out.println("Initialize: " + (System.nanoTime() - t) / 1000_000.0 + "ms.");
     } catch (FileNotFoundException e) {
       System.out.println(file + " not found");
     }

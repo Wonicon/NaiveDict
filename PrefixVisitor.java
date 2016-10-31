@@ -1,11 +1,6 @@
 import java.util.*;
 
 public class PrefixVisitor {
-  /**
-   * A mutable buffer recording all chars met in traversal.
-   */
-  private StringBuilder buffer = null;
-
   private TrieTree dictionary;
 
   private int limit = 0;
@@ -17,7 +12,6 @@ public class PrefixVisitor {
   }
 
   public ArrayList<String> collectByPrefix(String prefix, int limit) {
-    buffer = new StringBuilder(prefix);
     this.limit = limit;
     ArrayList<String> results = new ArrayList<>();
     TrieTree root = dictionary.getNext(prefix);
@@ -29,7 +23,7 @@ public class PrefixVisitor {
 
   private void collectByPrefix(TrieTree root, ArrayList<String> results) {
     if (root.isEnd()) {
-      results.add(buffer.toString());
+      results.add(root.getEntry().getWord());
       limit--;
       if (limit == 0) {
         return;
@@ -39,9 +33,7 @@ public class PrefixVisitor {
     for (char c : chars.toCharArray()) {
       TrieTree next = root.getNext(c);
       if (next != null) {
-        buffer.append(c);
         collectByPrefix(next, results);
-        buffer.deleteCharAt(buffer.length() - 1);
         if (limit == 0) {
           break;
         }
