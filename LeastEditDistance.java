@@ -50,12 +50,23 @@ public class LeastEditDistance {
       editDistance = leastEditDistance(original, candidate);
     }
 
+    /**
+     * EditDistance > Length > DictionaryOrder
+     */
     @Override
     public int compareTo(Object o) {
-      Pair led = (Pair) o;
-      if (this.editDistance < led.editDistance) return -1;
-      else if (this.editDistance == led.editDistance) return 0;
-      else return 1;
+      Pair other = (Pair) o;
+      if (this.editDistance == other.editDistance) {
+        int lenThis = this.candidate.length();
+        int lenOther = other.candidate.length();
+        if (lenThis == lenOther) {
+          return this.candidate.compareTo(other.candidate);
+        } else {
+          return lenThis - lenOther;
+        }
+      } else {
+        return this.editDistance - other.editDistance;
+      }
     }
   }
 
