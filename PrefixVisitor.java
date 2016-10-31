@@ -10,7 +10,7 @@ public class PrefixVisitor {
 
   private int limit = 0;
 
-  private final String chars = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ";
+  private final String chars = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ ";
 
   PrefixVisitor(TrieTree dictionary) {
     this.dictionary = dictionary;
