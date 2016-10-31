@@ -79,9 +79,9 @@ public class TrieTree {
     try (Scanner dictionary = new Scanner(new File(file))) {
       dictionary.nextLine();              // Consume the header.
       while (dictionary.hasNext()) {
-        dictionary.next();                // Consume the sequence number.
-        tree.add(dictionary.next());      // Record the word.
-        dictionary.nextLine();            // Ignore other information.
+        // ID | Entry | [Pron] | Description
+        String[] items = dictionary.nextLine().split("\t");
+        tree.add(items[1]);
       }
     } catch (FileNotFoundException e) {
       System.out.println(file + " not found");
