@@ -19,7 +19,7 @@ public class Entry {
       description = items[3];
     } else {
       pronunciation = null;
-      description = items[2];
+      description = items[items.length -1];
     }
   }
 
