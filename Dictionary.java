@@ -83,7 +83,6 @@ public class Dictionary extends Application {
       TrieTree root = index.getNext(textField.getText());
       Entry ent = root == null ? null : root.getEntry();
       if (ent != null) {
-        System.out.println(ent.getDescription());
         updateInfo(ent.getWord());
       } else {
         Timer t = new Timer();
