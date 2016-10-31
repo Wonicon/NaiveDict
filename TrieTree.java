@@ -73,30 +73,31 @@ public class TrieTree {
   }
 
   public static TrieTree createTree(String file) {
+    Timer.start();
+
     TrieTree tree = new TrieTree();
 
     try (Scanner dictionary = new Scanner(new File(file))) {
       dictionary.nextLine();  // Consume the header.
-      long t = System.nanoTime();
       while (dictionary.hasNext()) {
         Entry entry = new Entry(dictionary.nextLine());
         tree.add(entry);
       }
-      System.out.println("Initialize: " + (System.nanoTime() - t) / 1000_000.0 + "ms.");
     } catch (FileNotFoundException e) {
       System.out.println(file + " not found");
     }
 
+    Timer.report("Initialize");
     return tree;
   }
 
   public static TrieTree createTree(Entry[] entries) {
-    long t = System.nanoTime();
+    Timer.start();
     TrieTree tree = new TrieTree();
     for (Entry e : entries) {
       tree.add(e);
     }
-    System.out.println("Indexing: " + (System.nanoTime() - t) / 1000_000.0 + "ms.");
+    Timer.report("Indexing");
     return tree;
   }
 

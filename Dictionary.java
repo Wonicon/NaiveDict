@@ -56,6 +56,7 @@ public class Dictionary extends Application {
       if (ent != null) {
         System.out.println(ent.getDescription());
       } else {
+        Timer.start();
         LeastEditDistance led = new LeastEditDistance(textField.getText());
         LeastEditDistance.Pair[] queue = new LeastEditDistance.Pair[words.length];
         for (int i = queue.length - 1; i >= 0; i--) {
@@ -65,6 +66,7 @@ public class Dictionary extends Application {
         for (int i = 0; i < 10; i++) {
           System.out.println(queue[i].getCandidate() + ": " + queue[i].getEditDistance());
         }
+        Timer.report("L.E.D.");
       }
     });
 

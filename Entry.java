@@ -41,17 +41,17 @@ public class Entry {
   }
 
   public static Entry[] getEntriesFromDictionary(String file) {
+    Timer.start();
     ArrayList<Entry> list = new ArrayList<>();
     try (Scanner dictionary = new Scanner(new File(file))) {
       dictionary.nextLine();  // Consume the header.
-      long t = System.nanoTime();
       while (dictionary.hasNext()) {
         list.add(new Entry(dictionary.nextLine()));
       }
-      System.out.println("Retrieve entries: " + (System.nanoTime() - t) / 1000_000.0 + "ms.");
     } catch (FileNotFoundException e) {
       System.out.println(file + " not found");
     }
+    Timer.report("Retrieve entries");
     return list.toArray(new Entry[list.size()]);
   }
 }
