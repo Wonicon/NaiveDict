@@ -35,6 +35,14 @@ public class LeastEditDistance {
     private String candidate = null;
     private int editDistance = Integer.MAX_VALUE;
 
+    public String getCandidate() {
+      return candidate;
+    }
+
+    public int getEditDistance() {
+      return editDistance;
+    }
+
     public Pair(String candidate_) {
       candidate = candidate_;
       editDistance = leastEditDistance(original, candidate);

@@ -6,6 +6,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.collections.*;
 
+import java.util.Arrays;
+import java.util.PriorityQueue;
+
 public class Dictionary extends Application {
   public static final ObservableList<String> entries = FXCollections.observableArrayList();
 
@@ -48,9 +51,20 @@ public class Dictionary extends Application {
 
     // onAction is called when typed ENTER
     textField.setOnAction(e -> {
-      Entry ent = index.getNext(textField.getText()).getEntry();
+      TrieTree root = index.getNext(textField.getText());
+      Entry ent = root == null ? null : root.getEntry();
       if (ent != null) {
         System.out.println(ent.getDescription());
+      } else {
+        LeastEditDistance led = new LeastEditDistance(textField.getText());
+        LeastEditDistance.Pair[] queue = new LeastEditDistance.Pair[words.length];
+        for (int i = queue.length - 1; i >= 0; i--) {
+          queue[i] = led.new Pair(words[i].getWord());
+        }
+        Arrays.sort(queue);
+        for (int i = 0; i < 10; i++) {
+          System.out.println(queue[i].getCandidate() + ": " + queue[i].getEditDistance());
+        }
       }
     });
 
