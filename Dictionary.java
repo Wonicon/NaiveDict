@@ -43,6 +43,11 @@ public class Dictionary extends Application {
       }
     });
 
+    // onAction is called when typed ENTER
+    textField.setOnAction(e -> {
+      System.out.println(index.getEntry(textField.getText()).getEntry().getDescription());
+    });
+
     VBox stackPane = new VBox();
     stackPane.getChildren().add(textField);
     stackPane.getChildren().add(listView);
